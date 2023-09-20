@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)https://getbootstrap.com/docs/4.0/examples/floating-labels/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://img.icons8.com/ultraviolet/480/000000/opened-folder.png">
+    <!-- 아이콘 https://icons8.com/icon/set/popular/ultraviolet -->
+
+
+    <title>경로 변환기</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/floating-labels/">
+
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <style type="text/css">
+
+:root {
+  --input-padding-x: .75rem;
+  --input-padding-y: .75rem;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-align: center;
+  -ms-flex-pack: center;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 420px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.form-label-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.form-label-group > input,
+.form-label-group > label {
+  padding: var(--input-padding-y) var(--input-padding-x);
+}
+
+.form-label-group > label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  margin-bottom: 0; /* Override default `<label>` margin */
+  line-height: 1.5;
+  color: #495057;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  transition: all .1s ease-in-out;
+}
+
+.form-label-group input::-webkit-input-placeholder {
+  color: transparent;
+}
+
+.form-label-group input:-ms-input-placeholder {
+  color: transparent;
+}
+
+.form-label-group input::-ms-input-placeholder {
+  color: transparent;
+}
+
+.form-label-group input::-moz-placeholder {
+  color: transparent;
+}
+
+.form-label-group input::placeholder {
+  color: transparent;
+}
+
+.form-label-group input:not(:placeholder-shown) {
+  padding-top: calc(var(--input-padding-y) + var(--input-padding-y) * (2 / 3));
+  padding-bottom: calc(var(--input-padding-y) / 3);
+}
+
+.form-label-group input:not(:placeholder-shown) ~ label {
+  padding-top: calc(var(--input-padding-y) / 3);
+  padding-bottom: calc(var(--input-padding-y) / 3);
+  font-size: 12px;
+  color: #777;
+}
+
+
+    </style>
+
+
+  </head>
+
+  <body>
+    <form class="form-signin">
+      <div class="text-center mb-4">
+        <img class="mb-4" src="https://img.icons8.com/ultraviolet/480/000000/opened-folder.png" alt="" width="128" height="128">
+        <h1 class="h3 mb-3 font-weight-normal">Win ↔ mac 경로 변환기</h1>
+        <p>변환할 경로를 입력해주세요.</p>
+      </div>
+
+      <div class="form-label-group">
+        <input type="text" id="input_cell" class="form-control" placeholder="원본 경로" required="" autofocus="">
+        <label for="input_cell" id="label">원본 경로</label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" id="button" onclick="onButtonClick()" >경로 변환 & 복사</button>
+      <p class="mt-5 mb-3 text-muted text-center">© 세로전략팀</p>
+
+    </form>
+
+
+    <script src="https://code.jquery.com/jquery-2.2.1.js">
+    </script>
+    <script>
+    $("#input_cell").on("propertychange change keyup paste input", function()
+    {
+      document.getElementById('label').innerHTML = checkPlatform(document.getElementById('input_cell').value);
+    });
+    </script>
+    <script>
+
+      function checkPlatform(path)
+      {
+          if(path.includes('\\'))
+          {
+              result = "Windows";
+          }
+          else if(path.includes('/'))
+          {
+              result = "macOS";
+          }
+          else
+          {
+            result = "알 수 없는 경로"
+          }
+
+          return result;
+      }
+
+      function onButtonClick()
+      {
+          var input = document.getElementById("input_cell");
+          var path = input.value;
+
+          var result = "";
+          if(path.includes('\\'))
+          {
+              result = windowToMac(path);
+          }
+          else
+          {
+              result = macToWindow(path);
+          }
+
+          var copy = document.getElementById("input_cell");
+          copy.value = result;
+          copy.select();
+          document.execCommand("copy");
+          alert("클립보드에 복사되었습니다\n : " + result);
+      }
+
+
+
+      function replaceAll(str, searchStr, replaceStr)
+      {
+          return str.split(searchStr).join(replaceStr);
+      }
+      function windowToMac(path)
+      {
+
+
+
+          path = path.replace("\\\\10.0.0.211", "afp://kitty.smartstudy.co.kr");
+          path = path.replace("\\\\", "afp://");
+
+
+          path = replaceAll(path, "\\", "/");
+
+          path = path.replace("Y:", "afp://10.0.0.206/POP_CON_LIVE");
+          path = path.replace("Z:", "afp://10.0.0.206/POP_CON");
+          path = path.replace("N:", "afp://10.0.0.210/Netflix_Studio");
+          path = path.replace("V:", "afp://kitty.smartstudy.co.kr/Vertical");
+
+
+          return path;
+      }
+
+      function macToWindow(path)
+      {
+
+          path = path.replace("afp://10.0.0.206/POP_CON_LIVE", "Y:");
+          path = path.replace("afp://10.0.0.206/POP_CON", "Z:");
+          path = path.replace("afp://10.0.0.210/Netflix_Studio", "N:");
+          path = path.replace("afp://kitty.smartstudy.co.kr/Vertical","V:");
+          path = path.replace("afp://kitty.smartstudy.co.kr","\\\\10.0.0.211");
+
+
+
+          path = path.replace( "afp://", "\\\\");
+          path = replaceAll(path, "/", "\\");
+          path = path.normalize();
+
+          return path;
+      }
+
+
+
+
+  </script>
+
+
+
+</body></html>
